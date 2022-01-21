@@ -1,26 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header.js";
 import Addtask from "./components/Addtask.js";
 import TaskList from "./components/TaskList.js";
 
-const tasks = [
-  {
-    text: "Walk Bao",
-  },
-  {
-    text: "Read some books",
-  },
-  {
-    text: "Learn coding",
-  },
-];
-
 function App() {
+  function getStoredTasks() {
+    return JSON.parse(localStorage.getItem("tasks"));
+  }
+
+  const [tasks, setTasks] = useState(getStoredTasks());
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   return (
     <>
       <Header>TO-DO APP</Header>
-      <Addtask />
-      <TaskList tasks={tasks} />
+      <Addtask setTasks={setTasks} />
+      <TaskList tasks={tasks} setTasks={setTasks} />
     </>
   );
 }
